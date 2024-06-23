@@ -1,6 +1,6 @@
 import express from 'express';
 import registerUserCtrl from '../controller/user/registerUser.js';
-import checkUsernameCtrl from '../controller/user/checkUsername.js';
+import checkEmailCtrl from '../controller/user/checkEmail.js';
 import checkPasswordCtrl from '../controller/user/checkPassword.js';
 import userDetailsCtrl from '../controller/user/userDetails.js';
 import logoutCtrl from '../controller/user/logout.js';
@@ -11,8 +11,8 @@ import searchUserCtrl from '../controller/user/searchUser.js';
 const router = express.Router()
 
 router.post('/register', registerUserCtrl);
-router.post('/username', checkUsernameCtrl);
-router.post('/password', checkPasswordCtrl)
+router.post('/email', checkEmailCtrl);
+router.post('/password', checkPasswordCtrl);
 router.get('/user-details', userDetailsCtrl);
 router.get('/logout', logoutCtrl);
 router.post('/update-user', updateUserDetailsCtrl);

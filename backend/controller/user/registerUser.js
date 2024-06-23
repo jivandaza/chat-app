@@ -1,16 +1,24 @@
 import UserModel from '../../models/userModel.js';
 import bcryptjs from 'bcryptjs';
+import mongoose from "mongoose";
 
 async function registerUser (req, res){
     try {
-        const { name, username , password, profile_pic } = req.body;
+        const { name, email , password, profile_pic } = req.body;
 
-        const checkUsername = await UserModel.findOne({ username });
+        const checkEmail = await UserModel.findOne({ email });
 
-        if (checkUsername) {
+        if ( checkEmail ) {
             return res.status(400).json({
-                message : "El usuario ya existe",
+                message : "El correo electrónico ya esta registrado",
                 error : true,
+            });
+        }
+
+        if ( !password ) {
+            return res.status(400).json({
+                message: "Proporcionar contraseña",
+                error: true
             });
         }
 
@@ -19,7 +27,7 @@ async function registerUser (req, res){
 
         const payload = {
             name,
-            username,
+            email,
             profile_pic,
             password : hashPassword
         };
@@ -28,11 +36,22 @@ async function registerUser (req, res){
         await user.save();
 
         return res.status(201).json({
-            message : "Usuario creada con éxito",
+            message : "Registrado exitosamente",
             success : true
         });
 
     } catch (error) {
+        if ( error instanceof mongoose.Error.ValidationError ) {
+            const dataError = error.errors.email ? error.errors.email :
+                error.errors.name ? error.errors.name : null;
+            if ( dataError ) {
+                return res.status(400).json({
+                    message: dataError.message,
+                    error: true
+                });
+            }
+        }
+
         return res.status(500).json({
             message : error.message || error,
             error : true

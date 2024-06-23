@@ -2,12 +2,11 @@ import getUserDetailsFromToken from '../../helpers/getUserDetailsFromToken.js';
 
 async function userDetails(req, res){
     try {
-        const token = req.cookies.token || '';
+        const token = req.cookies.token || null;
 
         const user = await getUserDetailsFromToken(token);
 
         return res.status(200).json({
-            message : "user details",
             data : user
         });
 

@@ -6,13 +6,20 @@ async function checkPassword(req, res){
     try {
         const { password, userId } = req.body;
 
+        if ( !password ) {
+            return res.status(400).json({
+                message : "Proporcionar contraseña",
+                error : true
+            });
+        }
+
         const user = await UserModel.findById(userId);
 
         const verifyPassword = await bcryptjs.compare(password, user.password);
 
-        if (!verifyPassword) {
+        if ( !verifyPassword ) {
             return res.status(400).json({
-                message : "Por favor, verifique la contraseña",
+                message : "La contraseña no coincide",
                 error : true
             });
         }
@@ -30,7 +37,7 @@ async function checkPassword(req, res){
         };
 
         return res.cookie('token', token, cookieOptions).status(200).json({
-            message : "Iniciando sesión",
+            message : "Sesión iniciada",
             token : token,
             success : true
         });

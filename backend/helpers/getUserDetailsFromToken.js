@@ -3,9 +3,9 @@ import UserModel from '../models/userModel.js';
 
 const getUserDetailsFromToken = async (token) => {
 
-    if(!token){
+    if( !token ){
         return {
-            message : "Cerrando sesión",
+            message : "Sesión cerrada",
             logout : true,
         };
     }
