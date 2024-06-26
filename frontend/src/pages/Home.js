@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { logout, setOnlineUser, setSocketConnection, setUser } from '../redux/userSlice';
 import Sidebar from '../components/Sidebar';
 import logo from '../assets/logo.png';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import io from 'socket.io-client';
 
@@ -17,16 +18,19 @@ const Home = () => {
 
     const fetchUserDetails = async ()=> {
         try {
-            const URL = `${process.env.REACT_APP_BACKEND_URL}/api/user-details`;
+            const URL = `${window.location.origin}/api/user-details`;
             const response = await axios({
                 url : URL,
                 withCredentials : true
             });
 
-            dispatch(setUser(response.data.data));
+            const { data } = response.data;
 
-            if (response.data.data.logout) {
+            dispatch(setUser(data));
+
+            if ( data.logout ) {
                 dispatch(logout());
+                toast.success(data.message);
                 navigate('/login-correo');
             }
 
@@ -45,6 +49,8 @@ const Home = () => {
             auth : {
                 token : localStorage.getItem('token')
             },
+            transports: ['websocket', 'polling'],
+            withCredentials: true
         });
 
         socketConnection.on('onlineUser',(data)=> {
@@ -54,7 +60,7 @@ const Home = () => {
         dispatch(setSocketConnection(socketConnection));
 
         return ()=> {
-            socketConnection.disconnect()
+            socketConnection.disconnect();
         };
     },[]);
 
@@ -72,7 +78,6 @@ const Home = () => {
                 <Outlet/>
             </section>
 
-
             <div className={`justify-center items-center flex-col gap-2 hidden ${!basePath ? "hidden" : "lg:flex" }`}>
                 <div>
                     <img
@@ -81,7 +86,7 @@ const Home = () => {
                         alt='logo'
                     />
                 </div>
-                <p className='text-lg mt-2 text-slate-500'>Seleccionar usuario para enviar mensaje</p>
+                <p className='text-lg mt-2 text-slate-500'>Seleccionar contacto para enviar mensaje</p>
             </div>
         </div>
     );

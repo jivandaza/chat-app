@@ -34,7 +34,7 @@ const Avatar = ({userId,name,imageUrl,width,height}) => {
     const isOnline = onlineUser.includes(userId);
 
     return (
-        <div className={`text-slate-800  rounded-full font-bold relative`} style={{width : width+"px", height : height+"px" }}>
+        <div className={`text-slate-800 rounded-full font-bold relative`} style={{width : width+"px", height : height+"px" }}>
             {
                 imageUrl ? (
                     <img

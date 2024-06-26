@@ -9,7 +9,7 @@ const RegisterPage = () => {
 
     const [data, setData] = useState({
         name : "",
-        username : "",
+        email : "",
         password : "",
         profile_pic : ""
     });
@@ -53,7 +53,7 @@ const RegisterPage = () => {
         e.preventDefault();
         e.stopPropagation();
 
-        const URL = `${process.env.REACT_APP_BACKEND_URL}/api/register`;
+        const URL = `${window.location.origin}/api/register`;
 
         try {
             const response = await axios.post(URL, data);
@@ -63,12 +63,12 @@ const RegisterPage = () => {
 
                 setData({
                     name : "",
-                    username : "",
+                    email : "",
                     password : "",
                     profile_pic : ""
                 });
 
-                navigate('/username');
+                navigate('/login-correo');
             }
 
         } catch (error) {
@@ -97,16 +97,15 @@ const RegisterPage = () => {
                     </div>
 
                     <div className='flex flex-col gap-1'>
-                        <label htmlFor='username'>Nombre de Usuario :</label>
+                        <label htmlFor='username'>Correo electrónico:</label>
                         <input
-                            type='text'
-                            id='username'
-                            name='username'
-                            placeholder='Ingresar usuario'
+                            type='email'
+                            id='email'
+                            name='email'
+                            placeholder='Ingresar correo electrónico'
                             className='bg-slate-100 px-2 py-1 focus:outline-primary'
-                            value={data.username}
+                            value={data.email}
                             onChange={handleOnChange}
-                            required
                         />
                     </div>
 
